@@ -14,11 +14,15 @@ To merge using the default shallow merge:
 To merge using a shallow merge and a specified merge method:
 * Spread: `node index.js shallow spread pathToJsonOne pathToJsonTwo`
 * Assign: `node index.js shallow assign pathToJsonOne pathToJsonTwo`
+* Assign: `node index.js shallow loop pathToJsonOne pathToJsonTwo`
 
 To perform a deep merge:
 `node index.js deep pathToJsonOne pathToJsonTwo`
 
 The output to the console is the resulting merged json. This may be piped into other utilities as needed.
 
-## More comments
-This utility uses promises in the execution portion to enable chained asynchronous operations. The reading of files uses asynchronous execution wrapped in a promise to allow the async/await paradigm to be used in the top level module. The actual merge algorithm runs synchronously as promises would simply resolve immediately and add a small amount of overhead.
+## Sample Files
+Two sample JSONs are provided in the `spec/data` directory. Perform merges using the utility with:
+`node index.js ./spec/data/fileOne.json ./spec/data/fileTwo.json`
+`node index.js shallow ./spec/data/fileOne.json ./spec/data/fileTwo.json`
+`node index.js deep ./spec/data/fileOne.json ./spec/data/fileTwo.json`

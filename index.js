@@ -13,27 +13,34 @@ doMerge(args).then((result) => {
 });
 
 async function doMerge(args) {
+  let object1 = await openJson(args[args.length - 2]);
+  let object2 = await openJson(args[args.length - 1]);
+
   return new Promise((resolve, reject) => {
+    let shallowCallback = (err, result) => {
+      if (err) {
+        return reject(err);
+      }
+  
+      return resolve(result);
+    };
+
+    let deepCallback = (result) => {
+      return resolve(result);
+    }
+    
     if (args.length === 2) {
       // Default to a shallow merge using the spread operator
-      let object1 = await openJson(args[0]);
-      let object2 = await openJson(args[1]);
-      
-      let merged = merge.shallow(object1, object2);
-      resolve(merged);
+      merge.shallow(object1, object2, shallowCallback);
     } else if (args.length === 3) {
       // Merge two files with a merge type specified.
       let mergeType = args[0].toString().toLowerCase();
-      let object1 = openJson(args[1]);
-      let object2 = openJson(args[2]);
 
       if (mergeType === 'shallow') {
         // Shallow merge with default spread behavior
-        let merged = merge.shallow(object1, object2);
-        resolve(merged);
+        merge.shallow(object1, object2, shallowCallback);
       } else if (mergeType === 'deep') {
-        let merged = merge.deep(object1, object2);
-        resolve(merged);
+        merge.deep(object1, object2, deepCallback);
       } else {
         reject('The first parameter must be the merge type of either "shallow" or "deep".');
       }
@@ -42,12 +49,9 @@ async function doMerge(args) {
       // Merge two files with a shallow merge using the specified merge method.
       let mergeType = args[0].toString().toLowerCase();
       let mergeMethod = args[1].toString().toLowerCase();
-      let object1 = openJson(args[2]);
-      let object2 = openJson(args[3]);
 
       if (mergeType === 'shallow') {
-        let merged = merge.shallow(object1, object2, mergeMethod);
-        resolve(merged);
+        merge.shallow(object1, object2, mergeMethod, shallowCallback);
       } else {
         reject('Only a shallow merge can have a merge method parameter.');
       }

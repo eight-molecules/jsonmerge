@@ -21,12 +21,29 @@ module.exports.shallow = function shallow(object1, object2) {
     return result;
   }
 
+  const loopMerge = (obj1, obj2) => {
+    var result = {};
+
+    Object.keys(obj1).forEach((key) => {
+      result[key] = object1[key];
+    });
+    
+    Object.keys(obj2).forEach((key) => {
+      result[key] = object2[key];
+    });
+
+    return result;
+  }
+
   if (mergeType === 'spread') {
     let result = spreadMerge(object1, object2);
     callback(null, result);
   } else if (mergeType === 'assign') {
     let result = assignMerge(object1, object2);
     callback(null, result)
+  } else if (mergeType === 'loop') {
+    let result = loopMerge(object1, object2);
+    callback(null, result);
   } else {
     if (typeof mergeType === string) {
       callback('No merge type ' + mergeType + ' is available.', null);

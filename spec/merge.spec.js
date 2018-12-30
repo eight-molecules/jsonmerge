@@ -216,6 +216,114 @@ describe('shallow', () => {
       });
     });
   });
+  
+  describe('shallow with loop', () => {
+    it('merges two unique objects', () => {
+      let obj1 = {
+        uniqueKeyOne: '1',
+        uniqueKeyTwo: 2
+      }
+
+      let obj2 = {
+        uniqueKeyThree: true,
+        uniqueKeyFour: null
+      }
+
+      let expectedResult = {
+        uniqueKeyOne: '1',
+        uniqueKeyTwo: 2,
+        uniqueKeyThree: true,
+        uniqueKeyFour: null
+      }
+
+      merge.shallow(obj1, obj2, 'loop', (err, result) => {
+        expect(result).toEqual(expectedResult);
+      });
+    });
+
+    it('merges two unique objects with duplicate keys by keeping the last key', () => {
+      let obj1 = {
+        uniqueKeyOne: '1',
+        uniqueKeyTwo: 2
+      }
+
+      let obj2 = {
+        uniqueKeyTwo: true,
+        uniqueKeyThree: null
+      }
+
+      let expectedResult = {
+        uniqueKeyOne: '1',
+        uniqueKeyTwo: true,
+        uniqueKeyThree: null,
+      }
+
+      merge.shallow(obj1, obj2, 'loop', (err, result) => {
+        expect(result).toEqual(expectedResult);
+      });
+    });
+
+    it('merges two unique objects with deep objects to only keep the last value of the top level properties.', () => {
+      let obj1 = {
+        levelOneKeyOne: {
+          levelTwoKeyOne: {
+            keyOne: '1',
+            keyTwo: 2
+          }
+        },
+        levelOneKeyTwo: {
+          levelTwoKeyOne: null,
+          levelTwoKeyTwo: {
+            keyOne: false,
+            keyTwo: null,
+            levelThreeKeyOne: {
+              keyOne: 'string'
+            }
+          }
+        },
+        levelOneKeyThree: 2
+      }
+
+      let obj2 = {
+        levelOneKeyOne: {
+          levelTwoKeyOne: {
+            keyThree: true,
+            keyFour: null
+          }
+        },
+        levelOneKeyTwo: {
+          levelTwoKeyOne: 'string',
+          levelTwoKeyTwo: {
+            keyThree: true,
+            keyFour: 'string'
+          }
+        },
+        levelOneKeyFour: 'string'
+      }
+
+      let expectedResult = {
+        levelOneKeyOne: {
+          levelTwoKeyOne: {
+            keyThree: true,
+            keyFour: null
+          }
+        },
+        levelOneKeyTwo: {
+          levelTwoKeyOne: 'string',
+          levelTwoKeyTwo: {
+            keyThree: true,
+            keyFour: 'string'
+          }
+        },
+        levelOneKeyThree: 2,
+        levelOneKeyFour: 'string'
+      }
+
+      merge.shallow(obj1, obj2, 'loop', (err, result) => {
+        expect(result).toEqual(expectedResult);
+      });
+    });
+  });
 });
 
 describe('deep', () => {
