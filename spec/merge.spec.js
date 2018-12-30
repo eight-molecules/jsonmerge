@@ -435,7 +435,9 @@ describe('deep', () => {
             }
           }
         },
-        levelOneKeyThree: 2,
+        levelOneKeyThree: {
+          levelTwoKeyOne: 'string'
+        },
         levelOneKeyFour: 'string'
       }
 
@@ -453,9 +455,7 @@ describe('deep', () => {
             keyFour: 'string'
           }
         },
-        levelOneKeyThree: {
-          levelTwoKeyOne: 'string'
-        },
+        levelOneKeyThree: 2,
         levelOneKeyFive: null
       }
 
