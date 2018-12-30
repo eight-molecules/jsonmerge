@@ -1,0 +1,15 @@
+{
+  "name": "json-merge",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx jasmine"
+  },
+  "author": "Grant Elliott",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "jasmine": "^3.3.1"
+  }
+}

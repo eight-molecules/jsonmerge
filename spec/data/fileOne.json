@@ -1,0 +1,19 @@
+{
+  "levelOneKeyOne": {
+    "levelTwoKeyOne": {
+      "keyOne": "string",
+      "keyTwo": 2
+    }
+  },
+  "levelOneKeyTwo": {
+    "levelTwoKeyOne": null,
+    "levelTwoKeyTwo": {
+      "keyOne": false,
+      "keyTwo": null,
+      "levelThreeKeyOne": {
+        "keyOne": "string"
+      }
+    }
+  },
+  "levelOneKeyThree": 2
+}
