@@ -8,8 +8,8 @@ To run tests execute `npm test`. Tests are written using Jasmine and are stored 
 
 ## Use (CLI)
 To merge using the default shallow merge:
-`node index.js pathToJsonOne pathToJsonTwo`
-`node index.js shallow pathToJsonOne pathToJsonTwo`
+- `node index.js pathToJsonOne pathToJsonTwo`
+- `node index.js shallow pathToJsonOne pathToJsonTwo`
 
 To merge using a shallow merge and a specified merge method:
 * Spread: `node index.js shallow spread pathToJsonOne pathToJsonTwo`
@@ -17,12 +17,12 @@ To merge using a shallow merge and a specified merge method:
 * Assign: `node index.js shallow loop pathToJsonOne pathToJsonTwo`
 
 To perform a deep merge:
-`node index.js deep pathToJsonOne pathToJsonTwo`
+- `node index.js deep pathToJsonOne pathToJsonTwo`
 
 The output to the console is the resulting merged json. This may be piped into other utilities as needed.
 
 ## Sample Files
 Two sample JSONs are provided in the `spec/data` directory. Perform merges using the utility with:
-`node index.js ./spec/data/fileOne.json ./spec/data/fileTwo.json`
-`node index.js shallow ./spec/data/fileOne.json ./spec/data/fileTwo.json`
-`node index.js deep ./spec/data/fileOne.json ./spec/data/fileTwo.json`
+- `node index.js ./spec/data/fileOne.json ./spec/data/fileTwo.json`
+- `node index.js shallow ./spec/data/fileOne.json ./spec/data/fileTwo.json`
+- `node index.js deep ./spec/data/fileOne.json ./spec/data/fileTwo.json`
