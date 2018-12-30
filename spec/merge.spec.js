@@ -1,7 +1,7 @@
 const merge = require('../merge.js');
 
 describe('shallow', () => {
-  describe('with an invalid merge method', () => {
+  describe('with an invalid merge method string', () => {
     it('should return an error in the callback', () => {
       let obj1 = {
         uniqueKeyOne: '1',
@@ -12,7 +12,7 @@ describe('shallow', () => {
         uniqueKeyThree: true,
         uniqueKeyFour: null
       }
-      
+
       merge.shallow(obj1, obj2, 'not-a-merge-method', (err, result) => {
         expect(err).toBeDefined();
         expect(result).toBeNull();
@@ -39,7 +39,53 @@ describe('shallow', () => {
         uniqueKeyFour: null
       }
 
+      merge.shallow(obj1, obj2, (err, result) => {
+        expect(result).toEqual(expectedResult);
+      });
+    });
+
+    it('merges two unique objects when given a null merge method', () => {
+      let obj1 = {
+        uniqueKeyOne: '1',
+        uniqueKeyTwo: 2
+      }
+
+      let obj2 = {
+        uniqueKeyThree: true,
+        uniqueKeyFour: null
+      }
+
+      let expectedResult = {
+        uniqueKeyOne: '1',
+        uniqueKeyTwo: 2,
+        uniqueKeyThree: true,
+        uniqueKeyFour: null
+      }
+
       merge.shallow(obj1, obj2, null, (err, result) => {
+        expect(result).toEqual(expectedResult);
+      });
+    });
+    
+    it('merges two unique objects when given a non-string merge method', () => {
+      let obj1 = {
+        uniqueKeyOne: '1',
+        uniqueKeyTwo: 2
+      }
+
+      let obj2 = {
+        uniqueKeyThree: true,
+        uniqueKeyFour: null
+      }
+
+      let expectedResult = {
+        uniqueKeyOne: '1',
+        uniqueKeyTwo: 2,
+        uniqueKeyThree: true,
+        uniqueKeyFour: null
+      }
+
+      merge.shallow(obj1, obj2, {}, (err, result) => {
         expect(result).toEqual(expectedResult);
       });
     });
@@ -346,71 +392,102 @@ describe('shallow', () => {
 });
 
 describe('deep', () => {
-  it('should deep clone two unique objects', () => {
-    let obj1 = {
-      levelOneKeyOne: {
-        levelTwoKeyOne: {
-          keyOne: '1',
-          keyTwo: 2
-        }
-      },
-      levelOneKeyTwo: {
-        levelTwoKeyOne: null,
-        levelTwoKeyTwo: {
-          keyOne: false,
-          keyTwo: null,
-          levelThreeKeyOne: {
-            keyOne: 'string'
+  describe('given a primitive and an object', () => {
+    it('should return a clone of the second object.', () => {
+      let object1 = 1;
+      let object2 = {
+        keyOne: 1
+      };
+
+      merge.deep(object1, object2, (result) => {
+        expect(result).toEqual(object2);
+      });
+    });
+  });
+
+  describe('given two primitives', () => {
+    it('should return a clone of the second object.', () => {
+      let object1 = 1;
+      let object2 = 'string'
+
+      merge.deep(object1, object2, (result) => {
+        expect(result).toEqual(object2);
+      });
+    });
+  });
+
+  describe('given two objects', () => {
+    it('should deep clone two unique objects', () => {
+      let obj1 = {
+        levelOneKeyOne: {
+          levelTwoKeyOne: {
+            keyOne: '1',
+            keyTwo: 2
           }
-        }
-      },
-      levelOneKeyThree: 2
-    }
+        },
+        levelOneKeyTwo: {
+          levelTwoKeyOne: null,
+          levelTwoKeyTwo: {
+            keyOne: false,
+            keyTwo: null,
+            levelThreeKeyOne: {
+              keyOne: 'string'
+            }
+          }
+        },
+        levelOneKeyThree: 2,
+        levelOneKeyFour: 'string'
+      }
 
-    let obj2 = {
-      levelOneKeyOne: {
-        levelTwoKeyOne: {
-          keyThree: true,
-          keyFour: null
-        }
-      },
-      levelOneKeyTwo: {
-        levelTwoKeyOne: 'string',
-        levelTwoKeyTwo: {
-          keyThree: true,
-          keyFour: 'string'
-        }
-      },
-      levelOneKeyFour: 'string'
-    }
+      let obj2 = {
+        levelOneKeyOne: {
+          levelTwoKeyOne: {
+            keyThree: true,
+            keyFour: null
+          }
+        },
+        levelOneKeyTwo: {
+          levelTwoKeyOne: 'string',
+          levelTwoKeyTwo: {
+            keyThree: true,
+            keyFour: 'string'
+          }
+        },
+        levelOneKeyThree: {
+          levelTwoKeyOne: 'string'
+        },
+        levelOneKeyFive: null
+      }
 
-    let expectedResult = {
-      levelOneKeyOne: {
-        levelTwoKeyOne: {
-          keyOne: '1',
-          keyTwo: 2,
-          keyThree: true,
-          keyFour: null
-        }
-      },
-      levelOneKeyTwo: {
-        levelTwoKeyOne: 'string',
-        levelTwoKeyTwo: {
-          levelThreeKeyOne: {
-            keyOne: 'string'
-          },
-          keyOne: false,
-          keyTwo: null,
-          keyThree: true,
-          keyFour: 'string'
-        }
-      },
-      levelOneKeyThree: 2,
-      levelOneKeyFour: 'string'
-    }
+      let expectedResult = {
+        levelOneKeyOne: {
+          levelTwoKeyOne: {
+            keyOne: '1',
+            keyTwo: 2,
+            keyThree: true,
+            keyFour: null
+          }
+        },
+        levelOneKeyTwo: {
+          levelTwoKeyOne: 'string',
+          levelTwoKeyTwo: {
+            levelThreeKeyOne: {
+              keyOne: 'string'
+            },
+            keyOne: false,
+            keyTwo: null,
+            keyThree: true,
+            keyFour: 'string'
+          }
+        },
+        levelOneKeyThree: 2,
+        levelOneKeyFour: 'string',
+        levelOneKeyFive: null
+      }
 
-    merge.deep(obj1, obj2, (result) => {
-      expect(result).toEqual(expectedResult);
+      merge.deep(obj1, obj2, (result) => {
+        expect(result).toEqual(expectedResult);
+      });
     });
   });
 });

@@ -4,12 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "npx jasmine"
+    "test": "npx nyc jasmine"
   },
   "author": "Grant Elliott",
   "license": "ISC",
   "dependencies": {},
   "devDependencies": {
-    "jasmine": "^3.3.1"
+    "jasmine": "^3.3.1",
+    "nyc": "^13.1.0"
   }
 }

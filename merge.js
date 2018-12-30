@@ -3,7 +3,7 @@
 module.exports = {};
 
 module.exports.shallow = function shallow(object1, object2) {
-  let mergeType = (arguments.length === 4 && typeof arguments[arguments.length - 2] === 'string') ? arguments[arguments.length - 2] : 'spread';
+  let mergeType = (arguments.length === 4 && typeof arguments[arguments.length - 2] === 'string')  ? arguments[arguments.length - 2] : 'spread';
   let callback = arguments[arguments.length - 1];
 
   const spreadMerge = (obj1, obj2) => {
@@ -45,11 +45,7 @@ module.exports.shallow = function shallow(object1, object2) {
     let result = loopMerge(object1, object2);
     callback(null, result);
   } else {
-    if (typeof mergeType === 'string') {
-      callback('No merge type ' + mergeType + ' is available.', null);
-    } else {
-      callback('Merge type must be "spread", "assign", or "default".', null);
-    }
+    callback('No merge type ' + mergeType + ' is available.', null);
   }
 };
 
