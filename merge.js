@@ -45,7 +45,7 @@ module.exports.shallow = function shallow(object1, object2) {
     let result = loopMerge(object1, object2);
     callback(null, result);
   } else {
-    if (typeof mergeType === string) {
+    if (typeof mergeType === 'string') {
       callback('No merge type ' + mergeType + ' is available.', null);
     } else {
       callback('Merge type must be "spread", "assign", or "default".', null);

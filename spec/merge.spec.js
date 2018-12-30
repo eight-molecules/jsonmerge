@@ -1,6 +1,25 @@
 const merge = require('../merge.js');
 
 describe('shallow', () => {
+  describe('with an invalid merge method', () => {
+    it('should return an error in the callback', () => {
+      let obj1 = {
+        uniqueKeyOne: '1',
+        uniqueKeyTwo: 2
+      }
+
+      let obj2 = {
+        uniqueKeyThree: true,
+        uniqueKeyFour: null
+      }
+      
+      merge.shallow(obj1, obj2, 'not-a-merge-method', (err, result) => {
+        expect(err).toBeDefined();
+        expect(result).toBeNull();
+      });
+    });
+  });
+
   describe('default (spread)', () => {
     it('merges two unique objects', () => {
       let obj1 = {
