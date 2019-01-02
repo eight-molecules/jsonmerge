@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-module.exports = function(path) {
+function openJson(path) {
   return new Promise((resolve, reject) => {
     try {
       let absolutePath = require.resolve(path);
@@ -8,7 +8,7 @@ module.exports = function(path) {
         if (err) {
           return reject(err);
         }
-  
+
         let json = JSON.parse(data);
         resolve(json);
       });
@@ -16,4 +16,22 @@ module.exports = function(path) {
       reject(err);
     }
   });
+}
+
+function writeJson(obj, path) {
+  let json = JSON.stringify(obj);
+  return new Promise((resolve, reject) => {
+    fs.writeFile(path, json, (err) => {
+      if (err) {
+        reject(err);
+      }
+
+      resolve();
+    });
+  });
+}
+
+module.exports = {
+  openJson: openJson,
+  writeJson: writeJson
 }
