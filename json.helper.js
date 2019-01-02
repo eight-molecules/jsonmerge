@@ -1,9 +1,10 @@
 const fs = require('fs');
+const path = require('path');
 
-function openJson(path) {
+function openJson(filePath) {
   return new Promise((resolve, reject) => {
     try {
-      let absolutePath = require.resolve(path);
+      let absolutePath = require.resolve(filePath);
       fs.readFile(absolutePath, (err, data) => {
         if (err) {
           return reject(err);
@@ -18,16 +19,36 @@ function openJson(path) {
   });
 }
 
-function writeJson(obj, path) {
+function writeJson(obj, filePath) {
   let json = JSON.stringify(obj);
-  return new Promise((resolve, reject) => {
-    fs.writeFile(path, json, (err) => {
-      if (err) {
-        reject(err);
-      }
+  let directoryPath = path.dirname(filePath);
 
-      resolve();
+  const write = (json, filePath) => {
+    return new Promise((resolve, reject) => {
+      fs.writeFile(filePath, json, (err) => {
+        if (err) {
+          reject(err);
+        }
+
+        resolve();
+      });
     });
+  };
+
+  const createDirectories = (directoryPath) => {
+    return new Promise((resolve, reject) => {
+      fs.mkdir(directoryPath, {recursive: true}, (err) => {
+        if (err) {
+          return reject(err);
+        }
+        
+        resolve();
+      });
+    });
+  };
+
+  return createDirectories(directoryPath).then(() => {
+    return write(json, filePath);
   });
 }
 

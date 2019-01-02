@@ -2,19 +2,20 @@
 let util = require('util');
 
 let merge = require('./merge.js');
-let openJson = require('./openJson.js');
+let jsonHelper = require('./json.helper.js');
 
 let args = process.argv.slice(2);
 
 doMerge(args).then((result) => {
+  jsonHelper.writeJson(result, './output/merged.json');
   console.log(util.inspect(result, { depth: null }));
 }).catch((err) =>  {
   console.error(err);
 });
 
 async function doMerge(args) {
-  let object1 = await openJson(args[args.length - 2]);
-  let object2 = await openJson(args[args.length - 1]);
+  let object1 = await jsonHelper.openJson(args[args.length - 2]);
+  let object2 = await jsonHelper.openJson(args[args.length - 1]);
 
   return new Promise((resolve, reject) => {
     let shallowCallback = (err, result) => {

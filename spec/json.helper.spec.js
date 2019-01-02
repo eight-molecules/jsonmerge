@@ -4,8 +4,27 @@ const fs = require('fs');
 const jsonHelper = require('../json.helper.js');
 
 describe('writeJson', () => {
+  let directoryPath = __dirname + '/data/test';
+  let filePath = directoryPath + '/testFile.json';
+
+  afterEach(() => {
+    const fsCallback = (err, callback) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+
+        callback();
+    };
+
+    fs.unlink(filePath, (err) => { 
+      fsCallback(err, () => {
+        fs.rmdir(directoryPath, (err) => fsCallback(err, () => { }));
+      });
+    });
+  });
+
   it('should write the given object to the given path.', () => {
-    let path = __dirname + '/data/testFile.json';
     let objectToWrite = {
       test: "testString",
       someKey: {
@@ -13,7 +32,7 @@ describe('writeJson', () => {
       }
     };
 
-    jsonHelper.writeJson(objectToWrite, path).then(() => {
+    jsonHelper.writeJson(objectToWrite, filePath).then(() => {
       fs.access(path, (err) => {
         expect(err).toBeFalsy();
       });
