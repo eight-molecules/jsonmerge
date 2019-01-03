@@ -19,7 +19,7 @@ To merge using a shallow merge and a specified merge method:
 To perform a deep merge:
 - `node index.js deep pathToJsonOne pathToJsonTwo`
 
-The output to the console is the resulting merged json. This may be piped into other utilities as needed.
+The output is stored to a file at `output/merged.json` and printed to the console. The printed merge result may be piped into other utilities as needed.
 
 ## Sample Files
 Two sample JSONs are provided in the `spec/data` directory. Perform merges using the utility with:
