@@ -1,3 +1,5 @@
+'use strict'
+
 const merge = require('../merge.js');
 
 describe('shallow', () => {

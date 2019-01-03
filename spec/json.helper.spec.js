@@ -1,3 +1,5 @@
+'use strict'
+
 const path = require('path');
 const fs = require('fs');
 
@@ -25,16 +27,19 @@ describe('writeJson', () => {
   });
 
   it('should write the given object to the given path.', () => {
-    let objectToWrite = {
-      test: "testString",
-      someKey: {
-        withNesting: true
-      }
-    };
-
-    jsonHelper.writeJson(objectToWrite, filePath).then(() => {
-      fs.access(path, (err) => {
-        expect(err).toBeFalsy();
+    return new Promise((resolve) => {
+      let objectToWrite = {
+        test: "testString",
+        someKey: {
+          withNesting: true
+        }
+      };
+  
+      jsonHelper.writeJson(objectToWrite, filePath).then(() => {
+        return fs.access(filePath, (err) => {
+          expect(err).toBeFalsy();
+          resolve();
+        });
       });
     });
   });
