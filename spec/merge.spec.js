@@ -493,3 +493,132 @@ describe('deep', () => {
     });
   });
 });
+
+describe('all', () => {
+  describe('shallow', () => {
+    it('should merge all objects given', () => {
+      let objects = [{ keyOne: 1 }, { keyTwo: 'two', keyThree: false }, { keyThree: null }];
+      let expectedResult = {
+        keyOne: 1,
+        keyTwo: 'two',
+        keyThree: null
+      };
+      
+      return merge.all.shallow(objects, 'spread').then((mergedResult) => {
+        expect(mergedResult).toEqual(expectedResult);
+      });
+    });
+
+    it('should return an empty object when nothing is passed', () => {
+      let objects = [];
+      let expectedResult = { };
+      
+      return merge.all.shallow(objects, 'spread').then((mergedResult) => {
+        expect(mergedResult).toEqual(expectedResult);
+      });
+    });
+  });
+
+  describe('deep', () => {
+    it('should merge all objects given', () => {
+      let objects = [
+        {
+          levelOneKeyOne: {
+            levelTwoKeyOne: {
+              keyOne: '1',
+              keyTwo: 2
+            }
+          },
+          levelOneKeyTwo: {
+            levelTwoKeyOne: null,
+            levelTwoKeyTwo: {
+              keyOne: false,
+              keyTwo: null,
+              levelThreeKeyOne: {
+                keyOne: 'string'
+              }
+            }
+          },
+          levelOneKeyThree: {
+            levelTwoKeyOne: 'string'
+          },
+          levelOneKeyFour: 'string'
+        },
+
+        {
+          levelOneKeyOne: {
+            levelTwoKeyOne: {
+              keyThree: true,
+              keyFour: null
+            }
+          },
+          levelOneKeyTwo: {
+            levelTwoKeyOne: 'string',
+            levelTwoKeyTwo: {
+              keyThree: true,
+              keyFour: 'string'
+            }
+          },
+          levelOneKeyThree: false,
+          levelOneKeyFive: null
+        },
+        {
+          levelOneKeyTwo: {
+            levelTwoKeyOne: 'string',
+            levelTwoKeyTwo: {
+              keyFive: true,
+              keySix: 'string'
+            }
+          },
+          levelOneKeyFour: 2,
+          levelOneKeyFive: {
+            levelTwoKeyOne: null
+          }
+        }
+      ];
+
+      let expectedResult = {
+        levelOneKeyOne: {
+          levelTwoKeyOne: {
+            keyOne: '1',
+            keyTwo: 2,
+            keyThree: true,
+            keyFour: null
+          }
+        },
+        levelOneKeyTwo: {
+          levelTwoKeyOne: 'string',
+          levelTwoKeyTwo: {
+            levelThreeKeyOne: {
+              keyOne: 'string'
+            },
+            keyOne: false,
+            keyTwo: null,
+            keyThree: true,
+            keyFour: 'string',
+            keyFive: true,
+            keySix: 'string'
+          }
+        },
+        levelOneKeyThree: false,
+        levelOneKeyFour: 2,
+        levelOneKeyFive: {
+          levelTwoKeyOne: null
+        }
+      };
+      
+      return merge.all.deep(objects).then((mergedResult) => {
+        expect(mergedResult).toEqual(expectedResult);
+      });
+    });
+
+    it('should return an empty object when given nothing to merge.', () => {
+      let objects = [];
+      let expectedResult = {};
+      
+      return merge.all.deep(objects).then((mergedResult) => {
+        expect(mergedResult).toEqual(expectedResult);
+      });
+    });
+  });
+});
