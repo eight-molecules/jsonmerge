@@ -1,8 +1,6 @@
 'use strict'
 
-module.exports = {};
-
-module.exports.shallow = function shallow(object1, object2) {
+function shallow(object1, object2) {
   let mergeType = (arguments.length === 4 && typeof arguments[arguments.length - 2] === 'string')  ? arguments[arguments.length - 2] : 'spread';
   let callback = arguments[arguments.length - 1];
 
@@ -49,7 +47,25 @@ module.exports.shallow = function shallow(object1, object2) {
   }
 };
 
-module.exports.deep = function deep(object1, object2, callback) {
+function shallowReduce(objectArray, mergeType) {
+  return new Promise((resolve, reject) => {
+    var result = {};
+    
+    objectArray.forEach((obj) => {
+      shallow(result, obj, mergeType, (err, mergeResult) => {
+        if (err) {
+          reject(err);
+        }
+
+        result = mergeResult;
+      });
+    });
+
+    resolve(result);
+  });
+}
+
+function deep(object1, object2, callback) {
   const isMergeable = (obj) => {
     return !!obj && typeof obj === 'object';
   }
@@ -98,5 +114,28 @@ module.exports.deep = function deep(object1, object2, callback) {
     clone(object2, (result) => {
       callback(result);
     });
+  }
+};
+
+function deepReduce(objectArray) {
+  return new Promise((resolve) => {
+    var result = {};
+
+    objectArray.forEach((obj) => {
+      deep(result, obj, (mergeResult) => {
+        result = mergeResult;
+      });
+    });
+
+    resolve(result);
+  });
+}
+
+module.exports = {
+  shallow: shallow,
+  deep: deep,
+  all: {
+    shallow: shallowReduce,
+    deep: deepReduce
   }
 };

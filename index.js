@@ -26,30 +26,12 @@ async function doMerge(mergeMethod, mergeType, inputFiles) {
     return jsonHelper.openJson(fileName);
   });
 
-  let objects = await Promise.all(inputJsonPromises);
-
-  return new Promise((resolve, reject) => {
-    var result = {};
-
+  return Promise.all(inputJsonPromises).then((objects) => {
     if (mergeMethod === 'deep') {
-      objects.forEach((obj) => {
-        merge.deep(result, obj, (mergeResult) => {
-          result = mergeResult;
-        });
-      });
+      return merge.all.deep(objects);
     } else {
-      objects.forEach((obj) => {
-        merge.shallow(result, obj, mergeType, (err, mergeResult) => {
-          if (err) {
-            reject(err);
-          }
-
-          result = mergeResult;
-        });
-      });
+      return merge.all.shallow(objects);
     }
-
-    resolve(result);
   });
 }
 
