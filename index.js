@@ -2,8 +2,8 @@
 let util = require('util');
 let yargs = require('yargs');
 
-let merge = require('./merge.js');
-let jsonHelper = require('./json.helper.js');
+let merge = require('./lib/merge.js');
+let jsonHelper = require('./lib/json.helper.js');
 
 let mergeMethod = yargs.argv.m || 'shallow';
 let mergeType = yargs.argv.t || 'spread';
@@ -23,14 +23,15 @@ doMerge(mergeMethod, mergeType, inputFiles).then((result) => {
 
 async function doMerge(mergeMethod, mergeType, inputFiles) {
   let inputJsonPromises = inputFiles.map((fileName) => {
-    return jsonHelper.openJson(fileName);
+    let absolutePath = require.resolve(fileName);
+    return jsonHelper.openJson(absolutePath);
   });
 
   return Promise.all(inputJsonPromises).then((objects) => {
     if (mergeMethod === 'deep') {
       return merge.all.deep(objects);
     } else {
-      return merge.all.shallow(objects);
+      return merge.all.shallow(objects, mergeType);
     }
   });
 }

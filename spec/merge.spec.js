@@ -1,6 +1,6 @@
 'use strict'
 
-const merge = require('../merge.js');
+const merge = require('../lib/merge.js');
 
 describe('shallow', () => {
   describe('with an invalid merge method string', () => {

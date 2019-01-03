@@ -3,7 +3,7 @@
 const path = require('path');
 const fs = require('fs');
 
-const jsonHelper = require('../json.helper.js');
+const jsonHelper = require('../lib/json.helper.js');
 
 describe('writeJson', () => {
   let directoryPath = __dirname + '/data/test';
