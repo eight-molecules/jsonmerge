@@ -20,7 +20,7 @@ The shallow merge has multiple merge types available behind the `-t` flag:
 * Loop: `node index.js -m shallow -t loop pathToJsonOne pathToJsonTwo`
 
 You can specify an output file using the `-o` flag:
-`node index.js -o ./output/merged.json pathToJsonOne pathToJsonTwo pathToJsonThree ...`
+- `node index.js -o ./output/merged.json pathToJsonOne pathToJsonTwo pathToJsonThree ...`
 
 ## Sample Files
 Three sample JSONs are provided in the `spec/data` directory. Perform merges using the utility with:
